@@ -10,8 +10,8 @@ class Dice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'dice1',
-        'dice2',
+        'diceA',
+        'diceB',
         'result',
         'user_id'
     ];
