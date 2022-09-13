@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\API\DiceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // POST /players : crea un jugador/a.
 Route::post('players', [AuthController::class, 'register']);
+// POST /players/{id}/games/ : un jugador/a específic realitza una tirada dels daus.
+Route::post('/players/{id}/games', [DiceController::class, 'throwDice']);
+
+
+
+
 // LOGIN
 Route::post('login', [AuthController::class, 'login']);
 
