@@ -5,11 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\Passport;
 use App\Models\User;
 
-class AuthController extends Controller
+class RegisterController extends Controller
 {
     public function register(Request $request){
 
@@ -31,25 +29,4 @@ class AuthController extends Controller
         ]);
         
     }
-
-    public function login(Request $request){
-        $loginData =$request->validate([
-            'email'=> 'email|required',
-            'password' => 'required'
-        ]);
-        if(!Auth()->attempt($loginData)){
-            return response([
-                'message' => 'Invalid Credentials',
-            ]);
-        }
-
-            $user = $request->user();
-            $accessToken = $user->createToken('authToken')->accessToken;
-
-            return response(['user'=> Auth::user(), 'access_token'=> $accessToken, 'status' => 200]
-        );
-          
-    }
-
 }
-
