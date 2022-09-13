@@ -25,10 +25,6 @@ Route::post('players', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
 
 
-
-
-
-
 // PUT /players/{id} : modifica el nom del jugador/a.
 // POST /players/{id}/games/ : un jugador/a específic realitza una tirada dels daus.
 // DELETE /players/{id}/games: elimina les tirades del jugador/a.
