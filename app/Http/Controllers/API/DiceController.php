@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dice;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 use function GuzzleHttp\Promise\all;
@@ -13,7 +12,6 @@ class DiceController extends Controller
 {
     public function throwDice ($id)
     {
-
             
         $diceA = rand(1,6);
         $diceB = rand(1,6);
@@ -75,9 +73,8 @@ class DiceController extends Controller
     public function stats(){
         $stats  = DB::table('dices')        
         ->join('users', 'dices.user_id', '=', 'users.id')
-        ->selectRaw('users.name as users, 
-         sum(dices.result = 1)*100/count(dices.result) as winrate')  
-        ->orderby('winrate', 'desc')
+        ->selectRaw('users.name as Users, count(dices.result) as Total_Games, sum(dices.result = 1) as Games_Win, sum(dices.result = 1)*100/count(dices.result) as Winrate')  
+        ->orderby('Winrate', 'desc')
         ->groupby('users')
         ->get();
 
@@ -98,8 +95,7 @@ class DiceController extends Controller
     public function rankingPlayersLoser(){
         $playerRankingLoser = DB::table('dices')
         ->join('users', 'dices.user_id', '=', 'users.id')
-        ->selectRaw('users.name as users, 
-         sum(dices.result = 1)*100/count(dices.result) as winrate')  
+        ->selectRaw('users.name as users, sum(dices.result = 1)*100/count(dices.result) as winrate')  
         ->orderby('winrate')
         ->groupby('users')
         ->limit(1)
@@ -112,8 +108,7 @@ class DiceController extends Controller
     public function rankingPlayersWinner(){
         $playerRankingWinner = DB::table('dices')
         ->join('users', 'dices.user_id', '=', 'users.id')
-        ->selectRaw('users.name as users, 
-         sum(dices.result = 1)*100/count(dices.result) as winrate')  
+        ->selectRaw('users.name as users, sum(dices.result = 1)*100/count(dices.result) as winrate')  
         ->orderby('winrate', 'desc')
         ->groupby('users')
         ->limit(1)
