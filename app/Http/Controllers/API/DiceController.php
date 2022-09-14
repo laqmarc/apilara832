@@ -73,22 +73,23 @@ class DiceController extends Controller
     public function stats(){
         $stats  = DB::table('dices')        
         ->join('users', 'dices.user_id', '=', 'users.id')
-        ->selectRaw('users.name as Users, count(dices.result) as Total_Games, sum(dices.result = 1) as Games_Win, sum(dices.result = 1)*100/count(dices.result) as Winrate')  
-        ->orderby('Winrate', 'desc')
-        ->groupby('users')
+        ->selectRaw('users.name as User,  sum(dices.result = 1)*100/count(dices.result) as winrate')  
+        ->orderby('winrate', 'desc')
+        ->groupby('user')
         ->get();
 
-        return response(["User win rate" => $stats]);
+        return response(["user_win_rate" => $stats]);
     }
 
     public function rankingPlayers(){
 
         $allplayerRanking = DB::table('dices')
         ->join('users', 'dices.user_id', '=', 'users.id')
-        ->selectRaw('sum(dices.result = 1)/count(DISTINCT dices.id)/count(DISTINCT users.id)*100 as result')
+        // ->selectRaw('sum(dices.result = 1)/count(DISTINCT dices.id)/count(DISTINCT users.id)*100 as result')
+        ->selectRaw('(sum(dices.result = 1)/count(DISTINCT dices.id)/count(DISTINCT users.id))*100 as result')
         ->get();
  
-        return response(["All players win rate" => $allplayerRanking]);
+        return response(["all_players_win_rate" => $allplayerRanking]);
 
     }
 
@@ -101,7 +102,7 @@ class DiceController extends Controller
         ->limit(1)
         ->get();
  
-        return response(["The worst player" => $playerRankingLoser]);
+        return response(["worst_player" => $playerRankingLoser]);
 
     }
 
@@ -114,7 +115,7 @@ class DiceController extends Controller
         ->limit(1)
         ->get();
  
-        return response(["The best player" => $playerRankingWinner]);
+        return response(["best_player" => $playerRankingWinner]);
 
     }
 
