@@ -62,5 +62,19 @@ class AuthController extends Controller
         
     }
 
+    public function update(Request $request, $id)
+    {
+
+            $player = User::find($id);
+                
+            $request->validate([
+                'name' => 'required|max:255',
+                'email' => 'required|email|unique:users',  
+            ]);
+
+        $player->update($request->all());
+        return $player;
+    } 
+
 }
 
