@@ -25,7 +25,9 @@ Route::post('players', [AuthController::class, 'register']);
 // LOGIN
 Route::post('login', [AuthController::class, 'login']);
 //LOGOUT
-Route::post('/logout', [AuthController::class, 'logout']);
+// Route::post('/logout', [AuthController::class, 'logout']);
+//logout with middleware
+Route::middleware('auth:api')->get('/logout', [AuthController::class, 'logout']);
 // PUT /players/{id} : modifica el nom del jugador/a.
 Route::put('/players/{id}', [AuthController::class, 'update']);
 
