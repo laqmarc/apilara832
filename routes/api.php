@@ -14,7 +14,15 @@ use App\Http\Controllers\API\DiceController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// Cada jugador/a pot veure un llistat de totes les tirades que ha realitzat, 
+// amb el valor de cada dau i si s'ha guanyat o no la partida. 
+// A més, pots saber el seu percentatge d'èxit per totes les tirades que ha fet.
+// Es pot eliminar tot el llistat de tirades per un jugador/a.
 
+// El programari ha de permetre a l'administrador/a de l'aplicació 
+// visualitzar tots els jugadors/es que hi ha al sistema, 
+// veure el percentatge d'èxit de cada jugador/a i
+//  el percentatge d'èxit mitjà de tots els jugadors/es al sistema.
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -27,13 +35,21 @@ Route::post('login', [AuthController::class, 'login']);
 //LOGOUT
 // Route::post('/logout', [AuthController::class, 'logout']);
 //logout with middleware
-Route::middleware('auth:api')->get('/logout', [AuthController::class, 'logout']);
+// Route::middleware('auth:api')->get('/logout', [AuthController::class, 'logout']);
+
+// UPDATE
 // PUT /players/{id} : modifica el nom del jugador/a.
-Route::put('/players/{id}', [AuthController::class, 'update']);
+// Route::put('/players/{id}', [AuthController::class, 'update']);
+// Route::middleware('auth:api')->put('/players/{id}', [AuthController::class, 'updateName']);
 
 
 
 
+
+
+
+
+Route::middleware('auth:api')->group(function () {
 //GAME
 
 // POST /players/{id}/games/ : un jugador/a específic realitza una tirada dels daus.
@@ -52,7 +68,9 @@ Route::get('players/ranking',[DiceController::class, 'rankingPlayers']);
 Route::get('players/ranking/loser',[DiceController::class, 'rankingPlayersLoser']);
 // GET /players/ranking/winner: retorna el jugador/a amb millor percentatge d’èxit.
 Route::get('players/ranking/winner',[DiceController::class, 'rankingPlayersWinner']);
+// PUT /players/{id} : modifica el nom del jugador/a.
+Route::put('/players/{id}',[AuthController::class, 'updateName']);
+//Logout
+Route::post('/logout', [AuthController::class, 'logout']);
 
-
-
-
+});

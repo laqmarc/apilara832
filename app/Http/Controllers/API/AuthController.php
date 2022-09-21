@@ -9,37 +9,43 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Passport;
 use App\Models\User;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller{
     public function register(Request $request){
 
+        if($request['name'] == null){
+
         $validatedData = $request->validate([
-            'name' => 'max:255',
+            'name' => 'unique|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
+            'role' => 'required'
+
         ]);
         
+        $validatedData['name'] = 'Anònim';
+
+        }else{
+            
+        $validatedData = $request->validate([
+            'name' => 'required|unique:users|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
+            'role' => 'required'
+        ]);
+        }
+
         $validatedData['password'] = Hash::make($request->password);
-        
         $user = User::create($validatedData);
-       
         $accessToken = $user->createToken('authToken')->accessToken;
         
-        if($user){
-
         return response([
             'user' => $user,
             'acess_token' => $accessToken
         
         ]);
-        }else{
-            return response([
-                'user' => 'Anònim',
-                'acess_token' => $accessToken
-            
-            ]);
-        }
-        
+              
     }
 
     public function login(Request $request){
@@ -71,15 +77,30 @@ class AuthController extends Controller
         
     }
 
-    public function update(Request $request, $id)
+
+
+    //CHECK WITH TOKEN !!!
+    public function updateName(Request $request, $id)
     {
 
-        $player = User::find($id);
+        $playerAuth = Auth::user()->id;
+
+        if($playerAuth == $id){
+            $player = User::find($id);
             
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',  
-        ]);
+            $request->validate([
+                'name' => 'max:255',
+                'email' => 'email|unique:users',  
+            ]);
+        }elseif(!User::find($id)){
+            return response([
+                "message" => "User not in the game, register first."
+                    ], 404);
+        }else{
+            return response([
+                "message" => "Need authorization,"
+                    ], 401);
+        }
 
         $player->update($request->all());
         

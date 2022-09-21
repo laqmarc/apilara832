@@ -5,13 +5,14 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Dice;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use function GuzzleHttp\Promise\all;
 
-class DiceController extends Controller
-{
-    public function throwDice ($id)
-    {
+class DiceController extends Controller {
+
+    //USERS
+    public function throwDice ($id) {
             
         $diceA = rand(1,6);
         $diceB = rand(1,6);
@@ -43,21 +44,24 @@ class DiceController extends Controller
         }
     }
 
+
+
+    
     public function allGames ($id){
+        //USERS
         $playergames = Dice::where('user_id', '=', $id)->first('id');
 
-        if($playergames !== null)
-        {
+        if($playergames !== null){
             $throws = Dice::where('user_id', $id)->get();
             return response(["message" => "throws:", $throws]);
 
-        }elseif($playergames == null)
-        {
+        }elseif($playergames == null){
             return response(["message" => "No throws"]);
         }
     }
 
     public function deleteAllGames ($id){
+        //USER
         $playergames = Dice::where('user_id', '=', $id)->first('id');
 
         if($playergames !== null)
@@ -71,6 +75,19 @@ class DiceController extends Controller
     }
 
     public function stats(){
+            // El programari ha de permetre a l'administrador/a de l'aplicació 
+// visualitzar tots els jugadors/es que hi ha al sistema, 
+// veure el percentatge d'èxit de cada jugador/a i
+//  el percentatge d'èxit mitjà de tots els jugadors/es al sistema.
+
+//ADMIN
+        if (Auth::user()->role != 'admin') {
+            return response()->json([
+                'message' => 'U cant see it, you are not an admin',
+                
+            ]);
+        } else {
+
         $stats  = DB::table('dices')        
         ->join('users', 'dices.user_id', '=', 'users.id')
         ->selectRaw('users.name as Users, count(dices.result) as Total_Games, sum(dices.result = 1) as Games_Win, sum(dices.result = 1)*100/count(dices.result) as Winrate')  
@@ -78,21 +95,38 @@ class DiceController extends Controller
         ->groupby('users')
         ->get();
 
-        return response(["User win rate" => $stats]);
+        return response(["User_win_rate" => $stats]);
+        }
     }
 
-    public function rankingPlayers(){
 
+
+
+    public function rankingPlayers(){
+        //ADMIN
+        if (Auth::user()->role != 'admin') {
+            return response()->json([
+                'message' => 'U cant see it, you are not an admin',
+                
+            ]);
+        } else {
         $allplayerRanking = DB::table('dices')
         ->join('users', 'dices.user_id', '=', 'users.id')
         ->selectRaw('sum(dices.result = 1)/count(DISTINCT dices.id)/count(DISTINCT users.id)*100 as result')
         ->get();
  
-        return response(["All players win rate" => $allplayerRanking]);
-
+        return response(["All_players_win_rate" => $allplayerRanking]);
+        }
     }
 
     public function rankingPlayersLoser(){
+        //ADMIN
+        if (Auth::user()->role != 'admin') {
+            return response()->json([
+                'message' => 'U cant see it, you are not an admin',
+                
+            ]);
+        } else {
         $playerRankingLoser = DB::table('dices')
         ->join('users', 'dices.user_id', '=', 'users.id')
         ->selectRaw('users.name as users, sum(dices.result = 1)*100/count(dices.result) as winrate')  
@@ -101,11 +135,18 @@ class DiceController extends Controller
         ->limit(1)
         ->get();
  
-        return response(["The worst player" => $playerRankingLoser]);
-
+        return response(["The_worst_player" => $playerRankingLoser]);
+        }
     }
 
     public function rankingPlayersWinner(){
+        //ADMIN
+        if (Auth::user()->role != 'admin') {
+            return response()->json([
+                'message' => 'U cant see it, you are not an admin',
+                
+            ]);
+        } else {
         $playerRankingWinner = DB::table('dices')
         ->join('users', 'dices.user_id', '=', 'users.id')
         ->selectRaw('users.name as users, sum(dices.result = 1)*100/count(dices.result) as winrate')  
@@ -114,8 +155,8 @@ class DiceController extends Controller
         ->limit(1)
         ->get();
  
-        return response(["The best player" => $playerRankingWinner]);
-
+        return response(["The_best_player" => $playerRankingWinner]);
+        }
     }
 
 }
