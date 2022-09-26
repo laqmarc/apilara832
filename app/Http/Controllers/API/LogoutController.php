@@ -8,13 +8,12 @@ use Illuminate\Http\Request;
 class LogoutController extends Controller
 {
     
-    public function logout(Request $request) {
+    public function logout(Request $request){
         
         $request->user()->token()->revoke();
         return response([
             "message" => 'Session finished',
         ],200);
-
         
     }
 }

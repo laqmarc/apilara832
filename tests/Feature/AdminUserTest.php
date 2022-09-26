@@ -8,7 +8,7 @@ use App\Models\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
-class AUserTest extends TestCase
+class AdminUserTest extends TestCase
 {
     use WithFaker;
     /**
@@ -38,6 +38,7 @@ class AUserTest extends TestCase
 
     /** @test */
     public function testUserCanLogin(){      
+
         $user = User::factory()->make();
         $params = ['email' => 'marc@quexulo.cat', 'password' => '12341234',];
         $response =  $this->post( '/api/login', $params);
@@ -47,6 +48,7 @@ class AUserTest extends TestCase
     
     /** @test */
     public function testUserCanLogout($user = null){
+
         $user = $user ?: User::factory()->create();
         $user = Passport::actingAs($user);
         $response = $this->actingAs($user, 'api')->json('POST', '/api/logout');
@@ -66,6 +68,7 @@ class AUserTest extends TestCase
         $this->assertAuthenticated();
         $response->assertOk();
         $this->assertDatabaseHas('users', ['name' => 'ma']);
+        
     }
     
 }

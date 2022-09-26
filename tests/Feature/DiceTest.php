@@ -8,14 +8,15 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
-class ZDiceTest extends TestCase
+class DiceTest extends TestCase
 {
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function testUserCanThrowDice(){
+    /** @test */
+     public function testUserCanThrowDice(){
 
         $user = User::factory()->create();
         $user = Passport::actingAs($user);
@@ -24,6 +25,7 @@ class ZDiceTest extends TestCase
     
     }
 
+    /** @test */
     public function testUserCanShowMatches(){
 
         $user = User::factory()->create();
@@ -33,7 +35,7 @@ class ZDiceTest extends TestCase
     
     }
         
-        /** @test */
+    /** @test */
     public function testUserCanDeleteMatch(){
 
         $user = User::factory()->create();
@@ -44,8 +46,7 @@ class ZDiceTest extends TestCase
     }
 
     /** @test */
-    public function testAdminCanShowStats()
-    {
+    public function testAdminCanShowStats(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
         $admin = Passport::actingAs($admin);
@@ -54,8 +55,7 @@ class ZDiceTest extends TestCase
         
     }
 
-    public function testAdminCanShowRankingPlayers()
-    {
+    public function testAdminCanShowRankingPlayers(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
         $admin = Passport::actingAs($admin);
@@ -64,8 +64,7 @@ class ZDiceTest extends TestCase
         
     }
 
-    public function testAdminCanShowRankingPlayersWinner()
-    {
+    public function testAdminCanShowRankingPlayersWinner(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
         $admin = Passport::actingAs($admin);
@@ -74,8 +73,7 @@ class ZDiceTest extends TestCase
         
     }
 
-    public function testAdminCanShowRankingPlayersLoser()
-    {
+    public function testAdminCanShowRankingPlayersLoser(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
         $admin = Passport::actingAs($admin);
