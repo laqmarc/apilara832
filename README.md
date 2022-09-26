@@ -6,6 +6,10 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+<p>Command Instructions</p>
+<p>php artisan migrate:fresh</p>
+<p>php artisan passport:install ..force</p>
+<p> vendor/bin/phpunit</p>
 
 ## About Laravel
 

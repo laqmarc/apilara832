@@ -11,7 +11,7 @@ use function GuzzleHttp\Promise\all;
 
 class DiceController extends Controller {
 
-    //USERS
+    //PLAYERS
     public function throwDice ($id) {
             
         $diceA = rand(1,6);
@@ -48,7 +48,7 @@ class DiceController extends Controller {
 
     
     public function allGames ($id){
-        //USERS
+        //PLAYERS
         $playergames = Dice::where('user_id', '=', $id)->first('id');
 
         if($playergames !== null){
@@ -61,7 +61,7 @@ class DiceController extends Controller {
     }
 
     public function deleteAllGames ($id){
-        //USER
+        //PLAYERS
         $playergames = Dice::where('user_id', '=', $id)->first('id');
 
         if($playergames !== null)
