@@ -18,7 +18,6 @@ class AuthController extends Controller{
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
             'password_confirmation' => 'required',
-            'role' => 'required'
 
         ]);
         
@@ -31,7 +30,6 @@ class AuthController extends Controller{
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
             'password_confirmation' => 'required',
-            'role' => 'required'
         ]);
 
         }

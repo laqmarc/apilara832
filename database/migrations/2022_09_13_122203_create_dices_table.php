@@ -15,8 +15,8 @@ class CreateDicesTable extends Migration
     {
         Schema::create('dices', function (Blueprint $table) {
             $table->id();
-            $table->integer('diceA');
-            $table->integer('diceB');
+            $table->integer('dice_a');
+            $table->integer('dice_b');
             $table->boolean('result');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

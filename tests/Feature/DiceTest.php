@@ -55,6 +55,7 @@ class DiceTest extends TestCase
         
     }
 
+        /** @test */
     public function testAdminCanShowRankingPlayers(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
@@ -64,6 +65,8 @@ class DiceTest extends TestCase
         
     }
 
+
+    /** @test */
     public function testAdminCanShowRankingPlayersWinner(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
@@ -73,6 +76,7 @@ class DiceTest extends TestCase
         
     }
 
+        /** @test */
     public function testAdminCanShowRankingPlayersLoser(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
@@ -81,4 +85,28 @@ class DiceTest extends TestCase
         $response->assertOk();
         
     }
+
+// NEW TESTS Extrapolables les urls a tot el que no poden fer els no autentificats
+/** @test */
+    public function testUnauthenticatedUserCannotPlay(){
+
+        $response = $this->postJson('api/players/{id}/games');
+        $response->assertStatus(401);
+
+    }
+
+
+        /** @test */
+    public function testUnauthenticatedUserCannotListPlayersWinRate(){
+
+        $response = $this->getJson('api/players');
+        $response->assertStatus(401);
+
+    }
+
+
+
+
+
+
 }
