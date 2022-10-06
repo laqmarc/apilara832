@@ -29,7 +29,6 @@ class AdminUserTest extends TestCase
                 'role' => 'user'
         ]);
 
-        $response->assertSuccessful();
         $user = User::first();
         $this->assertDatabaseHas('users', $user->toArray());
     }
@@ -54,6 +53,7 @@ class AdminUserTest extends TestCase
 
     }
 
+    /** @test */
     public function testUserCanUpdate(){
 
         $this->artisan('passport:install');    
@@ -63,22 +63,62 @@ class AdminUserTest extends TestCase
         ['name' => 'ma',
          'email' => 'maa@m.com'  
         ]);
-        $this->assertAuthenticated();
         $response->assertOk();
-        $this->assertDatabaseHas('users', ['name' => 'ma']);
         
     }
+
     /** @test */
+    public function testEmailRequiredOnLogIn(){
 
-    public function testLoginWithEmptyPassword(){
-
-        $user = User::factory()
-        ->create(['password' => bcrypt($password = '12341234')]);
-        $this->post('api/login', 
-        ['name' => $user->name,
-         'password' => ""])
-         ->assertInvalid([
-            'password' => 'The password field is required.',
+        $this->artisan('passport:install');
+        $response = $this->post('api/login', [
+            'email' => '',
+            'password' => '12341234'
         ]);
+
+        $response->assertStatus(302);
+
     }
+    
+    /** @test */
+    public function testPasswordRequiredOnLogIn(){
+
+        $this->artisan('passport:install');
+        $response = $this->post('api/login', [
+            'email' => 'aaa@n.cat',
+            'password' => ''
+        ]);
+
+        $response->assertStatus(302);
+
+    }
+
+
+    public function testEmailAndPasswordRequiredOnLogIn(){
+
+        $this->artisan('passport:install');
+        $response = $this->post('api/login', [
+            'email' => '',
+            'password' => ''
+        ]);
+
+        $response->assertStatus(302);
+
+    }
+
+    /** @test */
+    public function testLoginShowErrors(){
+
+        $response = $this->post('api/login', []);
+        $response->assertStatus(302);
+
+    }
+
+    public function testRegisterShowErrors(){
+
+        $response = $this->post('api/players', []);
+        $response->assertStatus(302);
+
+    }
+
 }

@@ -53,7 +53,7 @@ class DiceTest extends TestCase
         
     }
 
-        /** @test */
+    /** @test */
     public function testAdminCanShowRankingPlayers(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
@@ -62,7 +62,6 @@ class DiceTest extends TestCase
         $response->assertOk();
         
     }
-
 
     /** @test */
     public function testAdminCanShowRankingPlayersWinner(){
@@ -74,7 +73,7 @@ class DiceTest extends TestCase
         
     }
 
-        /** @test */
+    /** @test */
     public function testAdminCanShowRankingPlayersLoser(){
 
         $admin = User::factory()->create(['role' => 'admin' ]);
@@ -82,10 +81,9 @@ class DiceTest extends TestCase
         $response = $this->actingAs($admin, 'api')->get(route('rankingPlayersLoser'));
         $response->assertOk();
         
-    }
+   }
 
-// NEW TESTS Extrapolables les urls a tot el que no poden fer els no autentificats
-/** @test */
+    /** @test */
     public function testUnauthenticatedUserCannotPlay(){
 
         $response = $this->postJson('api/players/{id}/games');
@@ -94,12 +92,55 @@ class DiceTest extends TestCase
     }
 
 
-        /** @test */
+    /** @test */
     public function testUnauthenticatedUserCannotListPlayersWinRate(){
 
         $response = $this->getJson('api/players');
         $response->assertStatus(401);
 
+    }
+    /** @test */
+    public function testUnauthenticatedUserCannotShowPlayersAllGames(){
+
+        $response = $this->getJson('api/players/{id}/games');
+        $response->assertStatus(401);
+
+    }
+    /** @test */
+    public function testUnauthenticatedUserCannotDeletePlayersGames(){
+
+        $response = $this->deleteJson('api/players/{id}/games');
+        $response->assertStatus(401);
+
+    }
+    /** @test */
+    public function testUnauthenticatedUserCannotShowRankings(){
+
+        $response = $this->getJson('api/players/ranking');
+        $response->assertStatus(401);
+
+    }
+
+    /** @test */
+    public function testUnauthenticatedUserCannotShowLosers(){
+
+        $response = $this->getJson('api/players/ranking/loser');
+        $response->assertStatus(401);
+
+    }
+
+    /** @test */
+    public function testUnauthenticatedUserCannotShowWinners(){
+
+        $response = $this->getJson('api/players/ranking/loser');
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+    public function testUnauthenticatedUserCannotUpdateName(){
+
+        $response = $this->putJson('api/players/{id}');
+        $response->assertStatus(401);
     }
 
 }
