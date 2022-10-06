@@ -43,8 +43,7 @@ Claramente funciona, pero el output no está muy pensado para frontend. Me expli
 - El output que devuelve tu API en los errores 404 es demasiado verboso e informativo. 
 
 
-
-
+crear 404
 -> eing??? 
 
 
@@ -52,9 +51,14 @@ Testing
 
 Aunque los que hay son casos interesantes, hay pocos tests. Se ha contemplado todo desde la perspectiva de cuando todo está bien, pero no veo tests para cuando las cosas no se explican correctamente o se hacen accesos indebidos. Sería interesante incluirlos también.
 
+-> testing
+
 Code Style
 
 No veo que tengas problemas para comprender como montar una API en Laravel, pero sigue viendo un reparto algo laxo de responsabilidades en tu código fuente. En concreto, demasiada lógica en algunos métodos de tus controladores. Recuerda, por ejemplo, que existen Modelos para encapsular operaciones de bases de datos, librando de esa responsabilidad a los controladores.
 
 En resumen, está bastante bien, Marc, pero necesito que le des una última o penúltima vuelta de tuerca.
 Saludos!
+
+diceapi
+Kgnx0000#

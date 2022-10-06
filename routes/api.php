@@ -58,3 +58,8 @@ Route::put('/players/{id}',[AuthController::class, 'updateName'])->name('updateN
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 });
+
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Page Not Found.'], 404);
+});

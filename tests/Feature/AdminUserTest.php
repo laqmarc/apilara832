@@ -31,8 +31,6 @@ class AdminUserTest extends TestCase
 
         $response->assertSuccessful();
         $user = User::first();
-        // $this->assertEquals('m', $user->name);
-        // $this->assertEquals('ma@m.com', $user->email);
         $this->assertDatabaseHas('users', $user->toArray());
     }
 
@@ -70,24 +68,17 @@ class AdminUserTest extends TestCase
         $this->assertDatabaseHas('users', ['name' => 'ma']);
         
     }
-  
+    /** @test */
 
-        /** @test */
-        public function testUserCanBeRegisteredLikeAnonim (){
+    public function testLoginWithEmptyPassword(){
 
-            $this->artisan('passport:install');
-            $this->withoutExceptionHandling();
-            $response = $this->postJson('api/players', [
-                    'name' => "",
-                    'email' => $this->faker->email,
-                    'password' => '12341234',
-                    'password_confirmation' => '12341234',
-            ]);
-    
-            $response->assertSuccessful();
-            $user = User::first();
-            // $this->assertEquals('m', $user->name);
-            // $this->assertEquals('ma@m.com', $user->email);
-            $this->assertDatabaseHas('users', $user->toArray());
-        }
+        $user = User::factory()
+        ->create(['password' => bcrypt($password = '12341234')]);
+        $this->post('api/login', 
+        ['name' => $user->name,
+         'password' => ""])
+         ->assertInvalid([
+            'password' => 'The password field is required.',
+        ]);
+    }
 }
